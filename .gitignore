@@ -1,2 +1,4 @@
 node_modules/
 .env
+data/interaction-locks/
+data/bot-instance.lock

@@ -45,6 +45,14 @@ const commands = [
     .setDescription('Check event points')
     .addUserOption((option) => option.setName('participant').setDescription('Participant to check')),
   new SlashCommandBuilder()
+    .setName('achievements')
+    .setDescription('View unlocked achievements')
+    .addUserOption((option) => option.setName('participant').setDescription('Participant to check')),
+  new SlashCommandBuilder()
+    .setName('rank-card')
+    .setDescription('View a participant rank card')
+    .addUserOption((option) => option.setName('participant').setDescription('Participant to check')),
+  new SlashCommandBuilder()
     .setName('leaderboard')
     .setDescription('Show the event points leaderboard'),
 ].map((command) => command.toJSON());
