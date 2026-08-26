@@ -141,6 +141,16 @@ if (!claimBotInstance()) {
 process.once('exit', releaseBotInstance);
 process.once('SIGINT', () => process.exit(0));
 process.once('SIGTERM', () => process.exit(0));
+process.once('uncaughtException', (error) => {
+  console.error('Uncaught bot error:', error);
+  releaseBotInstance();
+  process.exit(1);
+});
+process.once('unhandledRejection', (error) => {
+  console.error('Unhandled bot rejection:', error);
+  releaseBotInstance();
+  process.exit(1);
+});
 
 const client = new Client({
   intents: [GatewayIntentBits.Guilds],
