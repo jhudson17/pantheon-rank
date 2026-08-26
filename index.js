@@ -212,6 +212,16 @@ client.on('interactionCreate', async (interaction) => {
       const proof = interaction.options.getString('proof');
       if (otherReward) logEmbed.addFields({ name: 'Other reward', value: otherReward });
       if (proof) logEmbed.addFields({ name: 'Proof of reward', value: proof });
+      try {
+        const receiptEmbed = new EmbedBuilder()
+          .setColor(0x4f8cff)
+          .setTitle('Event points received')
+          .setDescription(`You have received ${awarded} point${awarded === 1 ? '' : 's'}. Your current rank is ${getRank(points[participant.id])}.`)
+          .setThumbnail(getRankBadgeUrl(points[participant.id]));
+        await participant.send({ embeds: [receiptEmbed] });
+      } catch (error) {
+        console.warn(`Could not DM ${participant.tag}: ${error.message}`);
+      }
       await interaction.editReply({ embeds: [logEmbed] });
       return;
     }
@@ -224,6 +234,16 @@ client.on('interactionCreate', async (interaction) => {
       points[participant.id] = Math.max(0, (points[participant.id] || 0) + adjustment);
       savePoints(pointsByGuild);
       const total = points[participant.id];
+      try {
+        const adjustmentEmbed = new EmbedBuilder()
+          .setColor(0x4f8cff)
+          .setTitle('Points adjusted')
+          .setDescription(`Your points have been adjusted to ${total} points. Your current rank is ${getRank(total)}.`)
+          .setThumbnail(getRankBadgeUrl(total));
+        await participant.send({ embeds: [adjustmentEmbed] });
+      } catch (error) {
+        console.warn(`Could not DM ${participant.tag}: ${error.message}`);
+      }
       const actionEmbed = new EmbedBuilder()
         .setColor(action === 'remove' ? 0xd95f59 : 0x45c486)
         .setTitle('Points adjusted')
