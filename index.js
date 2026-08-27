@@ -128,6 +128,11 @@ function makeProgressBar(percent) {
   return `${'█'.repeat(filled)}${'░'.repeat(10 - filled)} ${percent}%`;
 }
 
+function formatEmbedField(value) {
+  const text = String(value ?? '');
+  return text.length <= 1024 ? text : `${text.slice(0, 1021)}...`;
+}
+
 if (!token) {
   console.error('Missing DISCORD_TOKEN. Add it to a .env file.');
   process.exit(1);
@@ -190,11 +195,11 @@ client.on('interactionCreate', async (interaction) => {
         .setColor(0x45c486)
         .setTitle('Event suggestion')
         .addFields(
-          { name: 'Game or movie', value: options.getString('game'), inline: true },
-          { name: 'Host or co host', value: options.getString('host'), inline: true },
-          { name: 'Days and times', value: options.getString('availability') },
-          { name: 'Reward', value: options.getString('reward'), inline: true },
-          { name: 'Event plan', value: options.getString('plan') },
+          { name: 'Game or movie', value: formatEmbedField(options.getString('game')), inline: true },
+          { name: 'Host or co host', value: formatEmbedField(options.getString('host')), inline: true },
+          { name: 'Days and times', value: formatEmbedField(options.getString('availability')) },
+          { name: 'Reward', value: formatEmbedField(options.getString('reward')), inline: true },
+          { name: 'Event plan', value: formatEmbedField(options.getString('plan')) },
         )
         .setFooter({ text: `Suggested by ${interaction.user.tag}` })
         .setTimestamp();
